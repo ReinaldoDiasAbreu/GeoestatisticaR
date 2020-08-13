@@ -11,7 +11,7 @@ Authors@R:
       )
 Description: Esse script faz análise de geoestatística utilizando o pacote geoR como principal pacote. Para verificar como citar o pacote geoR, executar o comando citation('geoR'). Alguns detalhes/critérios sobre a análise podem ser encontrados em [Souza et al. (2017)](<https://doi.org/10.1016/j.geodrs.2017.07.008>).
 Author: Rodolfo Souza [aut, cre], Reinaldo Junio Dias de Abreu [aut, ctb]
-Depends: R (>= 4.0.0), geoR (>= 1.8-1), stats (>= 4.0.2), fBasics (>= 3042.89.1)
+Depends: R (>= 4.0.0), geoR (>= 1.8-1), stats (>= 4.0.2), fBasics (>= 3042.89.1), fdth (>= 1.2-5)
 License: GPL-3 | file LICENCE
 Encoding: UTF-8
 LazyData: true

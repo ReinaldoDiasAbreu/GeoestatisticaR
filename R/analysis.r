@@ -25,11 +25,13 @@ statistical_analysis <- function(data, column){
 #' freq_dist
 #'
 #' Calculates the frequency distribution
+#' 
 #' @param data Object type data.frame
 #' @param column Data variable column
 #' @param k Number of classes, if null is calculated following the Sturges rule
 #' @return data.frame with the frequency distribution
 #' @details Use the vector data and return the data.frame with the frequency distribution
+#' @importFrom fdth fdt
 #' @export
 freq_dist <- function(data, column, k=NULL){
   
@@ -39,26 +41,9 @@ freq_dist <- function(data, column, k=NULL){
     k = round(1 + 3.3*log10(length(vector))) # Sturges Rule
     message(paste("Defined",k,"classes using the Sturges Rule.", sep = " "))
   }
-  
-  v_max = max(vector)
-  v_min = min(vector)
-  
-  amplitude_total = v_max - v_min
-  amp = amplitude_total / (k-1)
-  
-  class = table(cut(vector, breaks = seq(v_min-amp/2, v_max+amp/2, by = amp), right = F))
-  fi = as.vector(class)
-  Fi = fi
-  
-  for(i in 2:length(fi)){Fi[i] = Fi[i-1] + Fi[i]}
-  fr = round(fi/length(vector), 4)
-  Fr = fr
-  for(i in 2:length(fr)){Fr[i] = (Fr[i-1] + Fr[i])}
-  table = data.frame(class, fi, Fi, fr, Fr)
-  table$Freq = NULL
-  
-  plot_hist(vector, k, fi)
-  
+
+  table = fdt(x = vector, k)
+
   return(table)
 }
 
