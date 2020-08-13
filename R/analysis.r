@@ -32,6 +32,7 @@ statistical_analysis <- function(data, column){
 #' @return data.frame with the frequency distribution
 #' @details Use the vector data and return the data.frame with the frequency distribution
 #' @importFrom fdth fdt
+#' @importFrom fdth plot.fdt.default
 #' @export
 freq_dist <- function(data, column, k=NULL){
   
@@ -43,6 +44,7 @@ freq_dist <- function(data, column, k=NULL){
   }
 
   table = fdt(x = vector, k)
+  plot.fdt.default(table, type=c('fh'))
 
   return(table)
 }
