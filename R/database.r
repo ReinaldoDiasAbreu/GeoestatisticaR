@@ -30,9 +30,44 @@ setdir <- function(dir = ""){
 #' @export
 load_data <- function(file, h, separator, decimal){
   dgeo = read.table(file = file, header = h, sep = separator, dec = decimal)
+  head(dgeo)
   return(dgeo)
 }
 
+#' load_geodata
+#'
+#' Load database and return a data.frame.
+#' 
+#' @param data Object type data.frame
+#' @param coords Columns of data coordinates in UTM
+#' @param column Data variable column
+#' @return Georeferenced data (class geodata)
+#' @details Use the data.frame and return Georeferenced data (class geodata) with it.
+#' @importFrom geoR as.geodata
+#' @export
+load_geodata <- function(data, coords, column){
+  geodata = as.geodata(data, coords.col = coords, data.col = column)
+  return(geodata)
+}
 
-
+#' statistical_analysis
+#'
+#' Performs normality tests
+#' 
+#' @param data Object type data.frame
+#' @param column Data variable column
+#' @return data frame with the results
+#' @details Perform normality tests: Kolmogorov-Smirnov and Shapiro-Wilk test
+#' @importFrom stats
+#' @export
+statistical_analysis <- function(data, collumn){
+  tks = ks.test(data[,collumn], 'pnorm', mean=mean(data[,collumn]), sd=sd(data[,collumn]))
+  sht = shapiro.test(data[,collumn])
+  tests = c("statistic", "p.value")
+  statistic = c(tks$statistic, sht$statistic)
+  p_value = c(tks$p.value, sht$p.value)
+  table = data.frame(tests, statistic, p_value)
+  names(table) <- c(" ","Kolmogorov-Smirnov","Shapiro-Wilk")
+  return(table)
+}
 
