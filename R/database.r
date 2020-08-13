@@ -49,25 +49,3 @@ load_geodata <- function(data, coords, column){
   geodata = as.geodata(data, coords.col = coords, data.col = column)
   return(geodata)
 }
-
-#' statistical_analysis
-#'
-#' Performs normality tests
-#' 
-#' @param data Object type data.frame
-#' @param column Data variable column
-#' @return data frame with the results
-#' @details Perform normality tests: Kolmogorov-Smirnov and Shapiro-Wilk test
-#' @importFrom stats
-#' @export
-statistical_analysis <- function(data, collumn){
-  tks = ks.test(data[,collumn], 'pnorm', mean=mean(data[,collumn]), sd=sd(data[,collumn]))
-  sht = shapiro.test(data[,collumn])
-  tests = c("statistic", "p.value")
-  statistic = c(tks$statistic, sht$statistic)
-  p_value = c(tks$p.value, sht$p.value)
-  table = data.frame(tests, statistic, p_value)
-  names(table) <- c(" ","Kolmogorov-Smirnov","Shapiro-Wilk")
-  return(table)
-}
-
