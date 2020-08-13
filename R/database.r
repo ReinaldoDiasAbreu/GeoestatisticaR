@@ -26,11 +26,9 @@ setdir <- function(dir = ""){
 #' @return Object type data.frame
 #' @details Use the read.table function to load the data and return a table with it.
 #' @importFrom utils read.table
-#' @importFrom utils head
 #' @export
 load_data <- function(file, h, separator, decimal){
   dgeo = read.table(file = file, header = h, sep = separator, dec = decimal)
-  head(dgeo)
   return(dgeo)
 }
 
