@@ -22,3 +22,42 @@ statistical_analysis <- function(data, column){
   return(table)
 }
 
+#' freq_dist
+#'
+#' Calculates the frequency distribution
+#'
+#' @param vector Object type data.frame
+#' @param k Number of classes
+#' @param show_preview Boolean which true case displays data.frame with the frequency distribution
+#' @return data.frame with the frequency distribution
+#' @details Use the vector data and return the data.frame with the frequency distribution
+#' @export
+freq_dist <- function(vector, k=NULL, show_preview=FALSE){
+  
+  if(is.null(k)){
+    k = round(1 + 3.3*log10(length(vector))) # Sturges Rule
+  }
+  
+  v_max = max(vector)
+  v_min = min(vector)
+  
+  amplitude_total = v_max - v_min
+  amp = amplitude_total / (k-1)
+  
+  class = table(cut(vector, breaks = seq(v_min-amp/2, v_max+amp/2, by = amp), right = F))
+  fi = as.vector(class)
+  Fi = fi
+  
+  for(i in 2:length(fi)){Fi[i] = Fi[i-1] + Fi[i]}
+  fr = round(fi/length(vector), 4)
+  Fr = fr
+  for(i in 2:length(fr)){Fr[i] = (Fr[i-1] + Fr[i])}
+  table = data.frame(class, fi, Fi, fr, Fr)
+  
+  if(show_preview == T){
+    print(table)
+    plot_hist(vector, k, fi)
+  }
+  
+  return(table)
+}
