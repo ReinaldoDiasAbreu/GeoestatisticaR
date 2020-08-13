@@ -32,9 +32,12 @@ statistical_analysis <- function(data, column){
 #' @details Use the vector data and return the data.frame with the frequency distribution
 #' @export
 freq_dist <- function(data, column, k=NULL){
+  
   vector = data[,column]
+  
   if(is.null(k)){
     k = round(1 + 3.3*log10(length(vector))) # Sturges Rule
+    message(paste("Defined",k,"classes using the Sturges Rule.", sep = " "))
   }
   
   v_max = max(vector)
@@ -52,6 +55,7 @@ freq_dist <- function(data, column, k=NULL){
   Fr = fr
   for(i in 2:length(fr)){Fr[i] = (Fr[i-1] + Fr[i])}
   table = data.frame(class, fi, Fi, fr, Fr)
+  table$Freq = NULL
   
   plot_hist(vector, k, fi)
   
@@ -113,4 +117,20 @@ normality_test <- function(data, colums){
   norm_test = data.frame(id=id, name=name, p.value=p_valor)
   print(norm_test)
   return(norm_test)
+}
+
+#' basic
+#'
+#' Call the basicStats function
+#'
+#' @param data Object type data.frame
+#' @param column Data column
+#' @return data.frame with the basic statistical measures
+#' @details Call the basicStats function, and plot the data boxplot
+#' @importFrom fBasics basicStats
+#' @export
+#'
+basic = function(data, column){
+  estb=basicStats(data[, column], ci=0.95)
+  return(estb)
 }
