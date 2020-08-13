@@ -25,15 +25,14 @@ statistical_analysis <- function(data, column){
 #' freq_dist
 #'
 #' Calculates the frequency distribution
-#'
-#' @param vector Object type data.frame
-#' @param k Number of classes
-#' @param show_preview Boolean which true case displays data.frame with the frequency distribution
+#' @param data Object type data.frame
+#' @param column Data variable column
+#' @param k Number of classes, if null is calculated following the Sturges rule
 #' @return data.frame with the frequency distribution
 #' @details Use the vector data and return the data.frame with the frequency distribution
 #' @export
-freq_dist <- function(vector, k=NULL, show_preview=FALSE){
-  
+freq_dist <- function(data, column, k=NULL){
+  vector = data[,column]
   if(is.null(k)){
     k = round(1 + 3.3*log10(length(vector))) # Sturges Rule
   }
@@ -54,10 +53,7 @@ freq_dist <- function(vector, k=NULL, show_preview=FALSE){
   for(i in 2:length(fr)){Fr[i] = (Fr[i-1] + Fr[i])}
   table = data.frame(class, fi, Fi, fr, Fr)
   
-  if(show_preview == T){
-    print(table)
-    plot_hist(vector, k, fi)
-  }
+  plot_hist(vector, k, fi)
   
   return(table)
 }
@@ -77,7 +73,7 @@ freq_dist <- function(vector, k=NULL, show_preview=FALSE){
 #' @importFrom graphics hist
 #' @export
 #'
-plot_hist <- function(data, k, fi, title="", x_name="Data", y_name="Frequency"){
+plot_hist <- function(data, k, fi, title="Histogram", x_name="Data", y_name="Frequency"){
   v_min = min(data)
   v_max = max(data)
   amplitude_total = v_max - v_min
@@ -92,3 +88,29 @@ plot_hist <- function(data, k, fi, title="", x_name="Data", y_name="Frequency"){
   )
 }
 
+
+#' normality_test
+#'
+#' Runs shapiro.test on the data columns
+#'
+#' @param data Object type data.frame
+#' @param colums Data columns
+#' @return data.frame with shapiro.test for selected columns
+#' @details Run shapiro.test on the data columns and return data.frame with the p_value of each column
+#' @importFrom stats shapiro.test
+#' @export
+#'
+normality_test <- function(data, colums){
+  id = c()
+  name = c()
+  p_valor = c()
+  for(i in colums){
+    id[length(id)+1] = i
+    name[length(name)+1] = names(data[i])
+    st = shapiro.test(data[,i])
+    p_valor[length(p_valor)+1] = st$p.value
+  }
+  norm_test = data.frame(id=id, name=name, p.value=p_valor)
+  print(norm_test)
+  return(norm_test)
+}
